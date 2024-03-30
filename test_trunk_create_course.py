@@ -43,7 +43,6 @@ def run(playwright: Playwright) -> None:
     try:
         #page.goto("https://qa23-mysql8.nightly.sakaiproject.org/portal/site/%7Erenee/tool/da28a705-cd2f-4072-bd37-
         page.get_by_role("button", name="Continue").click()
-        time.sleep(2)
     except:
         pass
     page.get_by_role("link", name="Still cannot find your course").click()
