@@ -27,6 +27,7 @@ def run(playwright: Playwright) -> None:
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Finish").click()
+    page.get_by_role("button", name="Profile image").click()
     page.get_by_role("link", name=" Log Out").click()
 
     # ---------------------
