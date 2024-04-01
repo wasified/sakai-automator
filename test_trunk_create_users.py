@@ -30,7 +30,7 @@ def run(playwright: Playwright) -> None:
     with page.expect_file_chooser() as fc_info:
         page.get_by_role("button", name="Drop files to upload, or").click()
     file_chooser = fc_info.value
-    file_chooser.set_files("wasi_25_users_CSV.csv")
+    file_chooser.set_files("users.csv")
     #page.get_by_role("button", name="Drop files to upload, or").click()
     #page.waitForEvent('filechooser')
     #page.get_by_role("button", name="Drop files to upload, or").set_input_files("wasi_25_users_CSV.csv")
