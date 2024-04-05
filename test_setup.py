@@ -2,7 +2,7 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 from utils.read_csv import get_user_list
 
 users_list = get_user_list()
-COURSE_NAME = "some4"
+COURSE_NAME = "VJ101"
 
 def test_login_admin(playwright: Playwright) -> None:
     global page, context, browser
@@ -11,9 +11,9 @@ def test_login_admin(playwright: Playwright) -> None:
     page = context.new_page()
     page.goto("https://trunk-mysql8.nightly.sakaiproject.org/")
     page.get_by_placeholder("Username").click()
-    page.get_by_placeholder("Username").fill("renee4")
+    page.get_by_placeholder("Username").fill("admin")
     page.get_by_placeholder("Username").press("Tab")
-    page.get_by_placeholder("Password").fill("sakai")
+    page.get_by_placeholder("Password").fill("admin")
     page.get_by_placeholder("Password").press("Enter")
 
 
