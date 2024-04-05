@@ -26,5 +26,18 @@ def get_user_list():
     return final_string
 
 def get_instructor_credentials():
-    pass
+    file = open("users.csv")
+    csvreader = csv.reader(file)
+    header = []
+    header = next(csvreader)
+
+    rows = []
+
+    for row in csvreader:
+        rows.append(row)
+
+    instructor_id = rows[0][0]
+    instructor_pass = rows[0][4]
+
+    return instructor_id, instructor_pass
 

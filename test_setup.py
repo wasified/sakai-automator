@@ -1,6 +1,7 @@
 from playwright.sync_api import Playwright, sync_playwright, expect
 from utils.read_csv import get_user_list
 
+
 users_list = get_user_list()
 COURSE_NAME = "VJ101"
 

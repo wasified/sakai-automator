@@ -10,9 +10,11 @@
 #-------------------------------------------------------------------------------
 
 from playwright.sync_api import Playwright, sync_playwright, expect
+from utils import read_csv
 
-ASSIGNMENT_NAME = "Assignment B"
-
+ASSIGNMENT_NAME = "Assignment C"
+COURSE_NAME = "VJ101"
+instructor_id, instructor_pass = read_csv.get_instructor_credentials()
 
 def run(playwright: Playwright) -> None:
     browser = playwright.chromium.launch(headless=False, slow_mo= 100)
@@ -20,15 +22,15 @@ def run(playwright: Playwright) -> None:
     page = context.new_page()
     page.goto("https://trunk-mysql8.nightly.sakaiproject.org/")
     page.get_by_placeholder("Username").click()
-    page.get_by_placeholder("Username").fill("renee")
+    page.get_by_placeholder("Username").fill(instructor_id)
     page.get_by_placeholder("Username").press("Tab")
-    page.get_by_placeholder("Password").fill("sakai")
+    page.get_by_placeholder("Password").fill(instructor_pass)
     page.get_by_placeholder("Password").press("Enter")
     #page.get_by_role("button", name="Expand tool list").click()
     #page.get_by_role("link", name="Assignments").click()
     #page.get_by_role("button", name="").click()
     #page.get_by_role("link", name="Okay, got it!").click()
-    page.get_by_role("link", name="VJ101 1 1 Spring").click()
+    page.get_by_role("link", name="%s 1 1 Spring"%COURSE_NAME).click()
     page.get_by_role("link", name="Assignments").click()
     page.get_by_role("link", name="Add").click()
     page.get_by_role("button", name="Post").click()
