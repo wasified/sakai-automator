@@ -1,8 +1,9 @@
 from playwright.sync_api import Playwright, sync_playwright, expect
-from utils.read_csv import get_user_list
+from utils.read_csv import get_user_list, get_instructor_credentials
 
 
 users_list = get_user_list()
+INSTRUCTOR_ID, INSTRUCTOR_PASS = get_instructor_credentials()
 COURSE_NAME = "VJ101"
 
 def test_login_admin(playwright: Playwright) -> None:
@@ -54,9 +55,9 @@ def test_login_instructor(playwright: Playwright) -> None:
     page = context.new_page()
     page.goto("https://trunk-mysql8.nightly.sakaiproject.org/")
     page.get_by_placeholder("Username").click()
-    page.get_by_placeholder("Username").fill("renee")
+    page.get_by_placeholder("Username").fill(INSTRUCTOR_ID)
     page.get_by_placeholder("Username").press("Tab")
-    page.get_by_placeholder("Password").fill("sakai")
+    page.get_by_placeholder("Password").fill(INSTRUCTOR_PASS)
     page.get_by_placeholder("Password").press("Enter")
 
     # start creating course
