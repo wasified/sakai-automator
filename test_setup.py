@@ -5,13 +5,14 @@ from utils.read_csv import get_user_list, get_instructor_credentials
 users_list = get_user_list()
 INSTRUCTOR_ID, INSTRUCTOR_PASS = get_instructor_credentials()
 COURSE_NAME = "VJ101"
+URL = "https://qa23-mysql8.nightly.sakaiproject.org/portal/"
 
 def test_login_admin(playwright: Playwright) -> None:
     global page, context, browser
-    browser = playwright.chromium.launch(headless=False, slow_mo= 1000)
+    browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
-    page.goto("https://trunk-mysql8.nightly.sakaiproject.org/")
+    page.goto(URL)
     page.get_by_placeholder("Username").click()
     page.get_by_placeholder("Username").fill("admin")
     page.get_by_placeholder("Username").press("Tab")
@@ -49,11 +50,11 @@ def test_logout(playwright: Playwright) -> None:
     #browser.close()
 
 def test_login_instructor(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False, slow_mo = 500)
+    browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
 
     page = context.new_page()
-    page.goto("https://trunk-mysql8.nightly.sakaiproject.org/")
+    page.goto(URL)
     page.get_by_placeholder("Username").click()
     page.get_by_placeholder("Username").fill(INSTRUCTOR_ID)
     page.get_by_placeholder("Username").press("Tab")
