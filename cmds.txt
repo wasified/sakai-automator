@@ -2,4 +2,4 @@ run
 pytest
 
 running test generator
-playwright codegen URL
+playwright codegen https://trunk-mysql8.nightly.sakaiproject.org/portal
