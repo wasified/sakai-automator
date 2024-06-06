@@ -31,3 +31,7 @@ This is a work in progress which converts one of Andrea's test scripts into.py f
 ### Users.csv
 
 A users.csv is included, but you can switch to any valid CSV that you already use with Sakai. Currently, no error handling to ensure patten of reading the CSV - will add that later. 
+
+### How to run tests
+
+Just run "pytest <script_name>)" in the terminal to start a test. Always run all tests from the root directory (even the ones in the subfolder) since the CSV is read relative to the root. 
