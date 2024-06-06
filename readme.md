@@ -34,4 +34,4 @@ A users.csv is included, but you can switch to any valid CSV that you already us
 
 ### How to run tests
 
-Just run "pytest <script_name>)" in the terminal to start a test. Always run all tests from the root directory (even the ones in the subfolder) since the CSV is read relative to the root. 
+Just run "pytest <script_name>" in the terminal to start a test. Always run all tests from the root directory (even the ones in the subfolder) since the users CSV is read from the root of where the script is called from. Further, test_setup.py should be run first since that test sxript creates users, a test course and adds the students to the course as well. 
