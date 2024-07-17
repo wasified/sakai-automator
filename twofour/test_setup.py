@@ -9,7 +9,7 @@ URL = "https://trunk-mysql8.nightly.sakaiproject.org/portal/"
 
 def test_login_admin(playwright: Playwright) -> None:
     global page, context, browser
-    browser = playwright.chromium.launch(headless=False, slow_mo = 1000)
+    browser = playwright.chromium.launch(headless=False, slow_mo = 200)
     context = browser.new_context()
     page = context.new_page()
     page.goto(URL)
