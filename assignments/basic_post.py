@@ -12,7 +12,11 @@
 from playwright.sync_api import Playwright, sync_playwright, expect
 from utils import read_csv
 
-ASSIGNMENT_NAME = "Assignment C"
+# This script translates the following test script:
+#https://docs.google.com/spreadsheets/d/1D4ClvBNbPE7A5JIQyeB1_PbVT7UuxxnrVFWUlNwB0yc/edit?gid=2076185087#gid=2076185087
+# comments have been added
+
+ASSIGNMENT_NAME = "Assignment D"
 COURSE_NAME = "VJ101"
 instructor_id, instructor_pass = read_csv.get_instructor_credentials()
 
@@ -34,7 +38,7 @@ def run(playwright: Playwright) -> None:
     page.get_by_role("link", name="Assignments").click()
     page.get_by_role("link", name="Add").click()
     page.get_by_role("button", name="Post").click()
-    # asset empty form isn't published
+    # asset empty form isn't published: 1.02 in script
     expect(page.get_by_text("Alert: Please specify the assignment title")).to_be_visible()
     page.get_by_placeholder("Title").click()
     page.get_by_placeholder("Title").fill(ASSIGNMENT_NAME)
@@ -44,8 +48,7 @@ def run(playwright: Playwright) -> None:
     page.get_by_label("Max Points").click()
     page.get_by_label("Max Points").fill("a")
     page.get_by_role("button", name="Post").click()
-
-    # asserts error message
+    # asserts error message: 1.06 in script
     expect(page.get_by_text("Alert: Please use a number")).to_be_visible()
     page.get_by_label("Hide due date from students").check()
     page.get_by_label("Add an announcement about the").check()
