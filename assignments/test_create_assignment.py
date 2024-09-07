@@ -341,8 +341,93 @@ def test_submit_on_behalf_student(playwright: Playwright) -> None:
     expect(page.locator("#assignmentsByStudent")).to_contain_text(submitted_re)
 
     # ---------------------
+    #context.close()
+    #browser.close()
+
+def test_instructor_grades(playwright: Playwright) -> None:
+    browser = playwright.chromium.launch(headless=False, slow_mo = 700)
+    context = browser.new_context()
+    page = context.new_page()
+    page.goto(URL)
+    page.get_by_placeholder("Username").click()
+    page.get_by_placeholder("Username").click()
+    page.get_by_placeholder("Username").fill("qateacher")
+    page.get_by_placeholder("Username").press("Tab")
+    page.get_by_placeholder("Password").fill("sakai")
+    page.get_by_placeholder("Password").press("Enter")
+    page.get_by_role("button", name="Expand tool list").click()
+    page.get_by_role("link", name="Assignments").click()
+    #page.get_by_role("link", name="Grade {}".format(ASSIGNMENT_NAME)).click()
+    page.get_by_role("link", name="Grade Assignment gNpBr").click()
+
+    #expect(page.locator("tr:nth-child(7) > td:nth-child(4)").first).to_have_text(re.compile(r"on behalf of"))
+    #expect(page.locator("tr:nth-child(11) > td:nth-child(5)").first).to_have_text(re.compile(r"Ungraded"))
+    #expect(page.locator("tr:nth-child(17) > td:nth-child(5)").first).to_have_text(re.compile(r"Ungraded"))
+    #expect(page.locator("tr:nth-child(24) > td:nth-child(5)").first).to_have_text(re.compile(r"Ungraded"))
+
+    #page.get_by_role("link", name="One, Student (student1)").click()
+    #page.get_by_role("button", name="Return to List").click()
+    #page.get_by_label("Use Sakai Grader to grade").uncheck()
+    page.get_by_role("link", name="One, Student (student1)").click()
+    #expect(page.get_by_role("rowgroup")).to_contain_text("Sep 6, 2024, 9:09 PM EDT Student One (student1) saved draft")
+    #page.locator("input[name=\"cancelgradesubmission2\"]").click()
+    #page.get_by_label("Use Sakai Grader to grade").check()
+    #page.get_by_role("link", name="One, Student (student1)").click()
+    # new stuff below
+
+    page.get_by_role("button", name="Grade Submission").click()
+    expect(page.get_by_label("Grader", exact=True)).to_contain_text("One, Student (student1)")
+    expect(page.get_by_label("Numeric grade input field")).to_be_visible()
+    expect(page.get_by_label("Write, or record, some")).to_be_visible()
+    expect(page.get_by_role("button", name="Add Attachments")).to_be_visible()
+    expect(page.get_by_label("Add notes attached to this")).to_be_visible()
+    expect(page.locator("#grader-extension-section")).to_be_visible()
+    expect(page.get_by_role("button", name="Save", exact=True)).to_be_visible()
+    expect(page.get_by_role("button", name="Save", exact=True)).to_be_visible()
+    expect(page.get_by_role("button", name="Save and Release to Student")).to_be_visible()
+    expect(page.get_by_role("button", name="Cancel")).to_be_visible()
+    page.get_by_label("Numeric grade input field").click()
+    page.get_by_label("Numeric grade input field").fill("1")
+    page.get_by_role("button", name="Save", exact=True).click()
+
+    page.get_by_role("button", name="Settings").click()
+    page.get_by_text("Navigate between students").click()
+    page.get_by_role("button", name="Done").click()
+    expect(page.locator("#grader-filter-warning")).to_contain_text("You've applied some settings. Click on the cog icon below to view them.")
+    page.get_by_label("Student selector").select_option(label = "Two, Student (student2)")
+    expect(page.locator("#grader-submitted-label")).to_contain_text("Submitted")
+    page.get_by_role("button", name="Grade Submission").click()
+    page.get_by_label("Numeric grade input field").fill("2")
+    page.get_by_role("button", name="Save", exact=True).click()
+
+
+    page.get_by_label("Student selector").select_option("Three, Student (student3)")
+    expect(page.locator("#grader-submitted-label")).to_contain_text("Submitted")
+    expect(page.locator("sakai-document-viewer div").nth(2)).to_be_visible()
+    page.get_by_role("button", name="Grade Submission").click()
+    page.get_by_label("Numeric grade input field").fill("3")
+    page.get_by_role("button", name="Save", exact=True).click()
+
+    page.get_by_role("button", name="Return to List").click()
+    # grader hides too quickly so have to find a work around
+    #expect(page.locator("tr:nth-child(7) > td:nth-child(5)").first).to_have_text(re.compile(r"Graded"))
+    #expect(page.locator("tr:nth-child(7) > td:nth-child(6)").first).to_have_text(re.compile("7.00"))
+    # student 2
+    #expect(page.locator("tr:nth-child(7) > td:nth-child(5)").first).to_have_text(re.compile(r"Graded"))
+    #expect(page.get_by_role("rowgroup")).to_contain_text("Graded")
+    #expect(page.get_by_role("rowgroup")).to_contain_text("Graded")
+    #expect(page.get_by_role("rowgroup")).to_contain_text("10.00")
+    #expect(page.get_by_role("rowgroup")).to_contain_text("7.00")
+    page.get_by_role("link", name="Release Grades").click()
+
+
+
+    # ---------------------
     context.close()
     browser.close()
+
+
+
 
 #with sync_playwright() as playwright:
 #    run(playwright)
