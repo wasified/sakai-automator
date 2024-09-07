@@ -20,6 +20,7 @@ from utils import read_csv
 import datetime
 import string
 import random
+import re
 
 # this is added so we make an assignment
 # with a new name everytime
@@ -255,8 +256,8 @@ def test_student_submission(playwright: Playwright) -> None:
     page.get_by_placeholder("Username").press("Tab")
     page.get_by_placeholder("Password").fill("sakai")
     page.get_by_placeholder("Password").press("Enter")
-    page.get_by_role("button", name=" Click to dismiss").click()
-    page.get_by_role("link", name="Okay, got it!").click()
+    #page.get_by_role("button", name=" Click to dismiss").click()
+    #page.get_by_role("link", name="Okay, got it!").click()
     page.get_by_role("button", name="Expand tool list").click()
     page.get_by_role("link", name="Assignments").click()
     page.get_by_role("link", name=ASSIGNMENT_NAME).click()
@@ -280,7 +281,9 @@ def test_student_submission(playwright: Playwright) -> None:
     page.get_by_label("post").click()
     expect(page.get_by_text("You have successfully")).to_be_visible()
     page.get_by_role("button", name="Back to list").click()
-    expect(page.get_by_role("cell", name="Submitted Sep 4, 2024, 8:24 PM")).to_be_visible()
+    submitted_re = re.compile("Submitted .*")
+    expect(page.get_by_role("rowgroup")).to_contain_text(submitted_re)
+    ## string to match
     page.get_by_role("button", name="Profile image").click()
     page.get_by_role("link", name=" Log Out").click()
     page.get_by_placeholder("Username").click()
@@ -288,9 +291,11 @@ def test_student_submission(playwright: Playwright) -> None:
     page.get_by_placeholder("Username").press("Tab")
     page.get_by_placeholder("Password").fill("sakai")
     page.get_by_placeholder("Password").press("Enter")
-    page.goto("https://trunk-mysql8.nightly.sakaiproject.org/portal/site/2ddbea63-62da-4ced-814a-a6e93c2120c8/tool/64785cf0-38d3-4750-946d-7a49e25f7cd1")
+    #page.goto("https://trunk-mysql8.nightly.sakaiproject.org/portal/site/2ddbea63-62da-4ced-814a-a6e93c2120c8/tool/64785cf0-38d3-4750-946d-7a49e25f7cd1")
+    page.get_by_role("link", name="%s 1 1 Spring"%COURSE_NAME).click()
+    page.get_by_role("link", name="Assignments").click()
     page.get_by_role("link", name=ASSIGNMENT_NAME).click()
-    page.get_by_label("Select a file from computer").click()
+    #page.get_by_label("Select a file from computer").click()
     page.get_by_label("Select a file from computer").set_input_files("test1.docx")
     page.get_by_role("button", name="Proceed").click()
     expect(page.get_by_text("Alert: If you are ready to")).to_be_visible()
@@ -303,6 +308,38 @@ def test_student_submission(playwright: Playwright) -> None:
     # log out as student
     page.get_by_role("button", name="Profile image").click()
     page.get_by_role("link", name=" Log Out").click()
+    # ---------------------
+    #context.close()
+    #browser.close()
+
+def test_submit_on_behalf_student(playwright: Playwright) -> None:
+    #browser = playwright.chromium.launch(headless = False)
+    #context = browser.new_context()
+    page = context.new_page()
+    page.goto("https://trunk-mysql8.nightly.sakaiproject.org/portal")
+    page.get_by_text("jump to content [c] Sites [w] Tools [l] Welcome View System Alert Username").click()
+    page.frame_locator("iframe[title=\"Home Information Message\"]").get_by_role("heading", name="Welcome to Sakai").click()
+    page.get_by_placeholder("Username").click()
+    page.get_by_placeholder("Username").fill("qateacher")
+    page.get_by_placeholder("Username").press("Tab")
+    page.get_by_placeholder("Password").fill("sakai")
+    page.get_by_placeholder("Password").press("Enter")
+    page.get_by_role("button", name="Expand tool list").click()
+    page.get_by_role("link", name="Assignments").click()
+    page.get_by_role("link", name="Assignments by Student").click()
+    page.get_by_role("link", name="Four, Student (student4)").click()
+    page.get_by_role("link", name="Submit on behalf of Student").first.click()
+    expect(page.locator("#content")).to_contain_text("This is an example preview of how students will see the assignment. You may work through this assignment as a student would, including submitting it.")
+    expect(page.locator("#addSubmissionForm")).to_contain_text("Student Four")
+    page.frame_locator("iframe[title=\"Editor\\, Assignment\\.view_submission_text\"]").locator("html").click()
+    page.frame_locator("iframe[title=\"Editor\\, Assignment\\.view_submission_text\"]").get_by_label("Editor, Assignment.").fill("This is some text from student 4. ")
+    page.get_by_role("button", name="Proceed").click()
+    expect(page.locator("#content")).to_contain_text("You have successfully submitted your work. You will receive an email confirmation containing this information.")
+    page.get_by_role("button", name="Back to list").click()
+    submitted_re = re.compile(r"Ungraded - Submitted .*")
+    #expect(page.locator("#assignmentsByStudent")).to_contain_text("Ungraded - Submitted Sep 6, 2024, 7:31 PM")
+    expect(page.locator("#assignmentsByStudent")).to_contain_text(submitted_re)
+
     # ---------------------
     context.close()
     browser.close()
