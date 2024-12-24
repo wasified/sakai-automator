@@ -109,7 +109,7 @@ def test_login_instructor(playwright: Playwright) -> None:
     page.get_by_label("Email Archive").check()
     page.get_by_label("Lessons").check()
     page.get_by_label("Messages").check()
-    page.get_by_label("News").check()
+    #page.get_by_label("News").check()
     page.get_by_label("Podcasts").check()
     page.get_by_label("Polls").check()
     page.get_by_label("PostEm").check()
