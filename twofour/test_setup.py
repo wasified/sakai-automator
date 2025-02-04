@@ -84,10 +84,10 @@ def test_login_instructor(playwright: Playwright) -> None:
     page.get_by_label("Course:").fill("1")
     page.get_by_label("Course:").press("Tab")
     page.get_by_label("Section:").fill("1")
-    page.get_by_label("* Authorizer's username:").click()
+    #page.get_by_label("* Authorizer's username:").click()
 
-    page.get_by_label("* Authorizer's username:").fill("admin")
-    page.get_by_label("* Authorizer's username:").fill("admin")
+    #page.get_by_label("* Authorizer's username:").fill("admin")
+    #page.get_by_label("* Authorizer's username:").fill("admin")
     page.get_by_role("button", name="Continue").click()
 
     page.frame_locator("iframe[title=\"Editor\\, description\"]").locator("html").click()
